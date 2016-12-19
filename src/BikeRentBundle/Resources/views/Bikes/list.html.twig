@@ -6,17 +6,50 @@
 
 {% block body %}
 
+
+    <input class="hidden" url="{{ path('br.bikes.add_favorite') }}" id="favorite_url">
+
     <div class="container br-bikes-wrapper">
         <div class="row">
 
 
-            <div class="col-xs-12">
-                <div class="br-bike-action   br-bike-filter pull-right">
+            <div class="col-xs-12" id="filter_bike">
+                <div data-toggle="popover" title="Filter Bikes"
+
+                     data-content='<form> <div class="form-group">
+                     <div class="checkbox">
+                     <label> <input type="checkbox" value="city" checked name="bike_filter"> City Bikes</label>
+                     </div>
+                     <div class="checkbox">
+                     <label> <input type="checkbox" value="mountain" checked name="bike_filter"> Mountain Bikes</label>
+                     </div>
+                      <div class="checkbox">
+                     <label> <input type="checkbox" value="tandem" checked name="bike_filter"> Tandem Bikes</label>
+                     </div>
+                     </div> </form>'
+                     data-placement="left"
+                     data-html="true"
+                     template='<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content">fdsfsd</div></div>'
+                     class="br-bike-action   br-bike-filter pull-right ">
                     <i class="fa fa-bars"></i>
                 </div>
 
 
             </div>
+
+
+
+            {%  set favbikeids =[] %}
+            {% if app.user %}
+
+            {%  for favbike in app.user.favorites %}
+            {% set favbikeids = favbikeids|merge([favbike.id]) %}
+
+            {%  endfor %}
+
+            {% endif %}
+
+
 
 
             {% for bike in bikes %}
@@ -34,12 +67,22 @@
                     </div>
                     <div class="br-bike-actions">
                         <div class="br-bike-action rent">
-                            <a  href="{{ path('br.rent.index', {'bike':bike.id}) }}"> <i class="fa fa-bicycle" aria-hidden="true"></i>
+                            <a href="{{ path('br.rent.index', {'bike':bike.id}) }}"> <i class="fa fa-bicycle"
+                                                                                        aria-hidden="true"></i>
                             </a>
                         </div>
-                        <div class="br-bike-action view">
-                            <i class="fa fa-eye" aria-hidden="true"></i>
+
+                       {% if (app.user) %}
+                        <div class="br-bike-action view favorite-bike" id="{{ bike.id }}" is-favorite="{{ bike.id in favbikeids == true? true: false}}">
+
+                            {% if (bike.id in favbikeids) %}
+                            <i class="fa fa-heart" aria-hidden="true"></i>
+                            {%  else  %}
+                            <i class="fa fa-heart-o" aria-hidden="true"></i>
+                            {%  endif %}
+
                         </div>
+                        {% endif %}
 
 
                     </div>

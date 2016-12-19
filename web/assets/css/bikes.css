@@ -60,7 +60,8 @@
 }
 
 .br-bike-action.view{
-    background-color: #2f2f32;
+    background-color: transparent;
+    color: #CDDC39;
 
 }
 .br-bike-filter{

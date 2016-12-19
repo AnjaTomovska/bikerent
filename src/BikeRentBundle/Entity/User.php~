@@ -25,4 +25,16 @@ class User extends BaseUser
      */
     protected $id;
 
+
+
+    /**
+     *
+     * @ORM\ManyToMany(targetEntity="Bike")
+     * @ORM\JoinTable(name="users_favorites",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="bike_id", referencedColumnName="id")}
+     *      )
+     */
+    private $favorites;
+
 }
