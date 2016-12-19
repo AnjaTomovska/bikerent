@@ -44,9 +44,15 @@ class RentController extends Controller
      */
     public function rentAction(Request $request){
 
+
         if (!$this->isValidRentRequest($request->request->all())){
 
+            $this->get('session')->set('postData', $request->request->all());
+
             return $this->redirect($this->generateUrl('br.rent.index'));
+        }
+        else{
+            $this->get('session')->remove('postData');
         }
 
         $reservation = new Reservation();
@@ -92,11 +98,26 @@ class RentController extends Controller
     private function isValidRentRequest($rentData){
 
 
+        $isValid = true;
+
         if (empty($rentData['phone'])){
-            $this->addFlash('error', 'Phone is required');
-            return false;
+            $this->addFlash('phoneError', 'Phone is required');
+            $this->addFlash('error.phone', 'Phone is required 2');
+            $isValid = false;
+        }
+        if( empty($rentData['bikes'])){
+            $this->addFlash('bikeError', 'Please select bikes you want to rent');
+            $isValid = false;
+        }
+        if( empty($rentData['start_date'])){
+            $this->addFlash('startError', 'Start date is required');
+            $isValid = false;
+        }
+        if( empty($rentData['end_date'])){
+            $this->addFlash('endError', 'End date is required');
+            $isValid = false;
         }
 
-        return true;
+        return $isValid;
     }
 }

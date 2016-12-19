@@ -11,6 +11,7 @@
     <div class="container br-body-wrapper">
         <div class="row">
 
+            {% set postData = (app.session.get('postData') == null) ? []: app.session.get('postData')%}
 
             <div class="col-xs-6 col-xs-offset-3">
                 <form method="post" action="{{ path('br.rent.rent') }}">
@@ -25,24 +26,39 @@
                         <input type="email" class="form-control" id="email" placeholder="Email" readonly value="{{ app.user.email }}">
                     </div>
 
-                    <div class="form-group">
+                    {% set phoneErros = app.session.flashbag.get('phoneError') %}
+                    <div class="form-group {% if phoneErros|length >0 %} has-error {% endif %}">
                         <label for="phone">Phone</label>
-                        <input type="tel" class="form-control" id="phone" placeholder="Phone number" name="phone">
+                        <input type="tel" class="form-control" id="phone" placeholder="Phone number" name="phone" value="{{ postData['phone']|default('') }}">
+                        {% if phoneErros|length >0  %}
+                        <span  class="help-block">{{ phoneErros[0] }}</span>
+                        {% endif %}
                     </div>
 
-                    <div class="form-group">
-                        <label for="phone">Rent start date</label>
 
-                        <input type="text" class="form-control" id="date_start" name="start_date">
+                    {% set startErrors = app.session.flashbag.get('startError') %}
+                    <div class="form-group {% if startErrors|length >0 %} has-error {% endif %}">
+                        <label for="date_start">Rent start date</label>
+
+                        <input type="text" class="form-control" id="date_start" name="start_date" value="{{ postData['start_date']|default('') }}">
+                        {% if startErrors|length >0 %}
+                            <span  class="help-block">{{ startErrors[0] }}</span>
+                        {% endif %}
                     </div>
 
-                    <div class="form-group">
-                        <label for="phone">Rent end date</label>
 
-                        <input type="text" class="form-control"   id="date_end" name="end_date">
+                    {% set endErrors = app.session.flashbag.get('endError') %}
+                    <div class="form-group {% if endErrors|length >0 %} has-error {% endif %}">
+                        <label for="date_end">Rent end date</label>
+
+                        <input type="text" class="form-control"   id="date_end" name="end_date" value="{{ postData['end_date']|default('') }}">
+                        {% if endErrors|length >0 %}
+                            <span  class="help-block">{{ endErrors[0] }}</span>
+                        {% endif %}
                     </div>
 
-                    <div class="form-group">
+                    {% set bikeError = app.session.flashbag.get('bikeError') %}
+                    <div class="form-group {% if bikeError|length >0 %} has-error {% endif %}">
                         <label for="phone">Bikes</label>
 
                         <select id="my_chosen" class="form-control" multiple name="bikes[]" >
@@ -51,6 +67,9 @@
                             {%  endfor %}
 
                         </select>
+                        {% if bikeError|length >0 %}
+                            <span  class="help-block">{{ bikeError[0] }}</span>
+                        {% endif %}
                     </div>
 
                     <div class="form-group">
