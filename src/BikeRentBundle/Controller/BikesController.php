@@ -73,18 +73,29 @@ class BikesController extends  Controller
 
         $repository = $this->getDoctrine()->getRepository('BikeRentBundle:Bike');
         $bike = $repository->find($request->request->get('id'));
-        $addFavorite = $repository->find($request->request->get('isFavorite'));
-        $user = $this->getUser();
-        if ($addFavorite){
-            $user->addFavorite($bike);
-        }
-        else{
-            $user->removeFavorite($bike);
-        }
 
+        $user = $this->getUser();
+        $user->addFavorite($bike);
         $dm = $this->getDoctrine()->getManager();
         $dm->persist($user);
         $dm->flush();
         return new JsonResponse('Success');
+    }
+
+    /**
+     * @Route("/remove-favorite", name="br.bikes.remove_favorite")
+     * @Method("GET")
+     */
+    public function removeAsFavorite(Request $request){
+
+        $repository = $this->getDoctrine()->getRepository('BikeRentBundle:Bike');
+        $bike = $repository->find($request->query->get('bike'));
+
+        $user = $this->getUser();
+        $user->removeFavorite($bike);
+        $dm = $this->getDoctrine()->getManager();
+        $dm->persist($user);
+        $dm->flush();
+        return $this->redirect($this->generateUrl('br.bikes.favorites'));
     }
 }

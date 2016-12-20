@@ -25,6 +25,7 @@ $(document).ready(function(){
 
     $(".favorite-bike").mouseover(function(){
 
+
         $(this).find('i').toggleClass('fa-heart-o');
         $(this).find('i').toggleClass('fa-heart');
     });
@@ -43,24 +44,18 @@ $(document).ready(function(){
 
         var thisElem = $(this);
 
-        if ($(this).attr('is-favorite')){
-            var isFavorite = false;
-        }
-        else {
-            var isFavorite = true;
-        }
+
 
         var data  ={
             'id': $(this).attr('id'),
-            'isFavorite' : isFavorite
+
         };
         $.ajax({
             url: url,
-
             method:'post',
             data:data
         }).success(function(response){
-           thisElem.attr('is-favorite', isFavorite);
+           thisElem.removeClass('favorite-bike');
            thisElem.find('i').toggleClass('fa-heart-o');
            thisElem.find('i').toggleClass('fa-heart');
 

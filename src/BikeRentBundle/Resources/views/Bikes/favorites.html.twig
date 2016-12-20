@@ -1,5 +1,8 @@
 {% extends 'base.html.twig' %}
-
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/bikes.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/favorites.css') }}">
+{% endblock %}
 
 {% block body %}
 
@@ -12,31 +15,49 @@
                 <thead>
                 <tr>
 
-                     <th>Brand </th> <th> Model </th> <th> Category </th> <th> Rent </th>
+                    <th>Brand</th>
+                    <th> Model</th>
+                    <th> Category</th>
+                    <th> Action</th>
                 </tr>
                 </thead>
 
                 <tbody>
 
-                {%  if (favorites|length == 0) %}
-                    <tr><td colspan="5" class="text-center">No bikes are added as favorites </td></tr>
+                {% if (favorites|length == 0) %}
+                    <tr>
+                        <td colspan="5" class="text-center">No bikes are added as favorites</td>
+                    </tr>
                 {% endif %}
 
 
-                {%  for bike in favorites %}
+                {% for bike in favorites %}
 
                     <tr>
 
                         <td>{{ bike.brend }}</td>
-                        <td>{{  bike.model }}</td>
+                        <td>{{ bike.model }}</td>
                         <td>{{ bike.category.name }}</td>
 
-                        <td> rent</td>
+                        <td>
+                            <div class="br-bike-actions">
+                                <div class="br-bike-action rent" data-toggle="tooltip" data-placement="left" title="Rent">
+                                    <a href="{{ path('br.rent.index', {'bike':bike.id}) }}">
+                                        <i class="fa fa-bicycle" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                                <div class="br-bike-action remove"  data-toggle="tooltip" data-placement="left" title="Remove from favorites">
+                                    <a href="{{ path('br.bikes.remove_favorite', {'bike':bike.id}) }}">
+                                        <i class="fa fa-trash" ria-hidden="true"></i>
+                                    </a>
 
+                                </div>
+                            </div>
+                        </td>
 
 
                     </tr>
-                {%  endfor %}
+                {% endfor %}
 
                 </tbody>
 

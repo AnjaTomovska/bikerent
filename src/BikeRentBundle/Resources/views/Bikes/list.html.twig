@@ -73,7 +73,7 @@
                         </div>
 
                        {% if (app.user) %}
-                        <div class="br-bike-action view favorite-bike" id="{{ bike.id }}" is-favorite="{{ bike.id in favbikeids == true? true: false}}">
+                        <div class="br-bike-action view {%  if   bike.id not in favbikeids  %} favorite-bike {% endif %}" id="{{ bike.id }}" >
 
                             {% if (bike.id in favbikeids) %}
                             <i class="fa fa-heart" aria-hidden="true"></i>
